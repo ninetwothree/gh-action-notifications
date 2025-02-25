@@ -4,11 +4,20 @@ on:
       SLACK_WEBHOOK:
         description: 'Webhook to projectname-dev slack channel'
         required: true
-
+    inputs:
+      NOTIFICATION_TYPE:
+          description: 'Action started / ended'
+          required: true
+          type: choise
+          default: started
+          options:
+            - started
+            - ended
 name: Send slack notification about action run
 jobs:
-  send-slack-notifications:
+  send-started-notifications:
     name: Send slack notification
+    if: inputs.NOTIFICATION_TYPE == 'started'
     runs-on: ubuntu-24.04
     steps:
     - name: Post a message in a Slack channel
@@ -34,6 +43,28 @@ jobs:
                   "text": "Repository: <https://github.com/${{ github.repository }}|${{ github.repository }}>"
                 }
               ]
+            }
+          ]
+        }
+  send-ended-notifications:
+    name: Send slack notification
+    if: inputs.NOTIFICATION_TYPE == 'ended'
+    runs-on: ubuntu-24.04
+    steps:
+    - name: Post a message in a Slack channel
+    uses: slackapi/slack-github-action@v2.0.0
+    with:
+      webhook: ${{ secrets.SLACK_WEBHOOK }}
+      webhook-type: incoming-webhook
+      payload: |
+        {
+          "blocks": [
+            {
+              "type": "section",
+              "text": {
+                "type": "mrkdwn",
+                "text": ":checkered_flag: *GitHub Action* Finished: `${{ github.workflow }}` - ${{ job.status }}\n*Branch*: <https://github.com/${{ github.repository }}/tree/${{ github.ref_name }}|${{ github.ref_name }}>\n*Action Run*: <https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}|View in GitHub>"
+              }
             }
           ]
         }
