@@ -8,7 +8,7 @@ on:
 name: Send slack notification about action run
 jobs:
   send-slack-notifications:
-    name: Send slakc notification
+    name: Send slack notification
     runs-on: ubuntu-24.04
     steps:
     - name: Post a message in a Slack channel
