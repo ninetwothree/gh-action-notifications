@@ -20,51 +20,51 @@ jobs:
     if: inputs.NOTIFICATION_TYPE == 'started'
     runs-on: ubuntu-24.04
     steps:
-    - name: Post a message in a Slack channel
-    uses: slackapi/slack-github-action@v2.0.0
-    with:
-      webhook: ${{ secrets.SLACK_WEBHOOK }}
-      webhook-type: incoming-webhook
-      payload: |
-        {
-          "blocks": [
+      - name: Post a message in a Slack channel
+        uses: slackapi/slack-github-action@v2.0.0
+        with:
+          webhook: ${{ secrets.SLACK_WEBHOOK }}
+          webhook-type: incoming-webhook
+          payload: |
             {
-              "type": "section",
-              "text": {
-                "type": "mrkdwn",
-                "text": ":rocket: *GitHub Action Started*: `${{ github.workflow }}`\n*Branch*: <https://github.com/${{ github.repository }}/tree/${{ github.ref_name }}|${{ github.ref_name }}>\n*Action Run*: <https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}|View in GitHub>"
-              }
-            },
-            {
-              "type": "context",
-              "elements": [
+              "blocks": [
                 {
-                  "type": "mrkdwn",
-                  "text": "Repository: <https://github.com/${{ github.repository }}|${{ github.repository }}>"
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": ":rocket: *GitHub Action Started*: `${{ github.workflow }}`\n*Branch*: <https://github.com/${{ github.repository }}/tree/${{ github.ref_name }}|${{ github.ref_name }}>\n*Action Run*: <https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}|View in GitHub>"
+                  }
+                },
+                {
+                  "type": "context",
+                  "elements": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "Repository: <https://github.com/${{ github.repository }}|${{ github.repository }}>"
+                    }
+                  ]
                 }
               ]
             }
-          ]
-        }
   send-ended-notifications:
     name: Send slack notification
     if: inputs.NOTIFICATION_TYPE == 'ended'
     runs-on: ubuntu-24.04
     steps:
-    - name: Post a message in a Slack channel
-    uses: slackapi/slack-github-action@v2.0.0
-    with:
-      webhook: ${{ secrets.SLACK_WEBHOOK }}
-      webhook-type: incoming-webhook
-      payload: |
-        {
-          "blocks": [
+      - name: Post a message in a Slack channel
+        uses: slackapi/slack-github-action@v2.0.0
+        with:
+          webhook: ${{ secrets.SLACK_WEBHOOK }}
+          webhook-type: incoming-webhook
+          payload: |
             {
-              "type": "section",
-              "text": {
-                "type": "mrkdwn",
-                "text": ":checkered_flag: *GitHub Action* Finished: `${{ github.workflow }}` - ${{ job.status }}\n*Branch*: <https://github.com/${{ github.repository }}/tree/${{ github.ref_name }}|${{ github.ref_name }}>\n*Action Run*: <https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}|View in GitHub>"
-              }
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": ":checkered_flag: *GitHub Action* Finished: `${{ github.workflow }}` - ${{ job.status }}\n*Branch*: <https://github.com/${{ github.repository }}/tree/${{ github.ref_name }}|${{ github.ref_name }}>\n*Action Run*: <https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}|View in GitHub>"
+                  }
+                }
+              ]
             }
-          ]
-        }
