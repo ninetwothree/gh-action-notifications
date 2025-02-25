@@ -8,11 +8,7 @@ on:
       NOTIFICATION_TYPE:
           description: 'Action started / ended'
           required: true
-          type: choise
-          default: started
-          options:
-            - started
-            - ended
+          type: string
 name: Send slack notification about action run
 jobs:
   send-started-notifications:
